@@ -1,0 +1,76 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.google.protobuf' version '0.8.8'
+}
+
+repositories {
+    jcenter()
+}
+
+
+dependencies {
+    def grpcVersion = '1.30.0'
+    def autoValueVersion = '1.7.3'
+
+    implementation "io.grpc:grpc-netty-shaded:$grpcVersion"
+    implementation "io.grpc:grpc-protobuf:$grpcVersion"
+    implementation "io.grpc:grpc-stub:$grpcVersion"
+    implementation "com.google.auto.value:auto-value-annotations:$autoValueVersion"
+
+    implementation 'com.google.guava:guava:28.2-jre'
+    implementation 'com.google.dagger:dagger:2.27'
+    implementation 'com.google.flogger:flogger:0.5.1'
+    implementation 'com.google.flogger:flogger-system-backend:0.5.1'
+
+    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.27'
+    annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
+
+    testImplementation 'junit:junit:4.13'
+    testImplementation "com.google.truth:truth:1.0.1"
+    testImplementation "org.mockito:mockito-core:3.3.3"
+    testImplementation "io.grpc:grpc-testing:$grpcVersion"
+}
+
+application {
+    mainClassName = 'dev.msiviero.App'
+}
+
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.11.0"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.29.0'
+        }
+    }
+    generateProtoTasks {
+        //noinspection GroovyAssignabilityCheck
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+                'Main-Class': 'com.msiviero.App'
+        )
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+

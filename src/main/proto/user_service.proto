@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "dev.msiviero.api";
+option java_outer_classname = "UserGrpcService";
+option java_multiple_files = true;
+
+message MyUserResponse {
+  string username = 1;
+}
+
+message MyUserRequest {
+}
+
+service User {
+  rpc MyUser(MyUserRequest) returns (MyUserResponse) {}
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "dev.msiviero.api";
+option java_outer_classname = "SecurityGrpcService";
+option java_multiple_files = true;
+
+message TokenRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message TokenResponse {
+  string token = 1;
+}
+
+service Security {
+  rpc GenerateToken(TokenRequest) returns (TokenResponse) {}
+}
