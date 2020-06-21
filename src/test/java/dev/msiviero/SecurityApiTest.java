@@ -103,7 +103,7 @@ public class SecurityApiTest {
             fail("Should throw exception");
 
         } catch (final StatusRuntimeException exception) {
-            assertThat(exception.getStatus().getCode()).isEqualTo(Code.NOT_FOUND);
+            assertThat(exception.getStatus().getCode()).isEqualTo(Code.FAILED_PRECONDITION);
         }
     }
 }

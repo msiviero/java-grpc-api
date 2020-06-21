@@ -5,6 +5,7 @@ import com.google.common.flogger.FluentLogger;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.ServerInterceptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,16 @@ public final class GrpcServer {
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
     private final List<BindableService> services;
+    private final List<ServerInterceptor> interceptors;
+
     private Server server;
 
-    private GrpcServer(final List<BindableService> services) {
+    private GrpcServer(
+        final List<BindableService> services,
+        final List<ServerInterceptor> interceptors
+    ) {
         this.services = services;
+        this.interceptors = interceptors;
     }
 
     public void start() throws IOException {
@@ -28,6 +35,10 @@ public final class GrpcServer {
 
         for (final BindableService service : services) {
             serverBuilder.addService(service);
+        }
+
+        for (final ServerInterceptor interceptor : interceptors) {
+            serverBuilder.intercept(interceptor);
         }
 
         server = serverBuilder.build();
@@ -64,15 +75,21 @@ public final class GrpcServer {
 
     public static class Builder {
 
-        List<BindableService> services = new ArrayList<>();
+        private final List<BindableService> services = new ArrayList<>();
+        private final List<ServerInterceptor> interceptors = new ArrayList<>();
 
         public Builder addService(final BindableService service) {
             services.add(service);
             return this;
         }
 
+        public Builder addInterceptor(final ServerInterceptor serverInterceptor) {
+            interceptors.add(serverInterceptor);
+            return this;
+        }
+
         public GrpcServer build() {
-            return new GrpcServer(services);
+            return new GrpcServer(services, interceptors);
         }
     }
 

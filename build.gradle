@@ -2,42 +2,64 @@ plugins {
     id 'java'
     id 'application'
     id 'com.google.protobuf' version '0.8.8'
+    id "org.flywaydb.flyway" version "6.4.4"
 }
 
 repositories {
     jcenter()
 }
 
-
 dependencies {
     def grpcVersion = '1.30.0'
     def autoValueVersion = '1.7.3'
+    def requeryVersion = '1.6.1'
+    def daggerVersion = '2.27'
+    def floggerVersion = '0.5.1'
+    def jwtVersion = '0.11.2'
 
     implementation "io.grpc:grpc-netty-shaded:$grpcVersion"
     implementation "io.grpc:grpc-protobuf:$grpcVersion"
     implementation "io.grpc:grpc-stub:$grpcVersion"
+
     implementation "com.google.auto.value:auto-value-annotations:$autoValueVersion"
-
     implementation 'com.google.guava:guava:28.2-jre'
-    implementation 'com.google.dagger:dagger:2.27'
-    implementation 'com.google.flogger:flogger:0.5.1'
-    implementation 'com.google.flogger:flogger-system-backend:0.5.1'
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.flogger:flogger:$floggerVersion"
+    implementation "com.google.flogger:flogger-system-backend:$floggerVersion"
 
-    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+    implementation 'mysql:mysql-connector-java:8.0.20'
 
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.27'
-    annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
+    implementation "io.requery:requery:$requeryVersion"
+
+    implementation 'com.zaxxer:HikariCP:3.4.5'
+
+    implementation "io.jsonwebtoken:jjwt-jackson:$jwtVersion"
+
+    implementation "org.slf4j:slf4j-simple:1.7.30"
+
 
     testImplementation 'junit:junit:4.13'
     testImplementation "com.google.truth:truth:1.0.1"
     testImplementation "org.mockito:mockito-core:3.3.3"
     testImplementation "io.grpc:grpc-testing:$grpcVersion"
+
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
+    annotationProcessor "io.requery:requery-processor:$requeryVersion"
+
+    runtime "io.jsonwebtoken:jjwt-impl:$jwtVersion"
+    runtime "io.jsonwebtoken:jjwt-jackson:$jwtVersion"
 }
 
 application {
     mainClassName = 'dev.msiviero.App'
 }
 
+flyway {
+    url = 'jdbc:mysql://127.0.0.1/app'
+    user = 'api'
+    password = 'password'
+}
 
 protobuf {
     protoc {
@@ -59,11 +81,14 @@ protobuf {
 jar {
     manifest {
         attributes(
-                'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
-                'Main-Class': 'com.msiviero.App'
+                'Main-Class': 'dev.msiviero.App'
         )
     }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
+
 
 sourceSets {
     main {

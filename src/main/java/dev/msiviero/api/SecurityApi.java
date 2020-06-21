@@ -9,7 +9,7 @@ import io.grpc.stub.StreamObserver;
 import javax.inject.Inject;
 
 public class SecurityApi extends SecurityImplBase {
-
+    
     private final SecurityService securityService;
 
     @Inject
@@ -20,17 +20,21 @@ public class SecurityApi extends SecurityImplBase {
     @Override
     public void generateToken(final TokenRequest request, final StreamObserver<TokenResponse> responseObserver) {
 
-        final AuthenticationResult authResult = securityService.authenticate(request.getUsername(), request.getPassword());
+        final AuthenticationResult authResult = securityService.authenticate(
+            request.getUsername(),
+            request.getPassword()
+        );
 
         if (authResult.successful()) {
-            final TokenResponse reply = TokenResponse.newBuilder()
+            final TokenResponse reply = TokenResponse
+                .newBuilder()
                 .setToken(authResult.token())
                 .build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } else {
             final Status status = Status
-                .fromCode(Code.NOT_FOUND)
+                .fromCode(Code.FAILED_PRECONDITION)
                 .withDescription("Invalid credentials");
             responseObserver.onError(status.asException());
         }

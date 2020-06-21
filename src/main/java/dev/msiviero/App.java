@@ -8,7 +8,7 @@ import java.io.IOException;
 public class App {
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(final String[] args) throws IOException, InterruptedException {
 
         final Graph graph = DaggerGraph.create();
 
@@ -16,6 +16,7 @@ public class App {
             .builder()
             .addService(graph.securityApi())
             .addService(graph.userApi())
+            .addInterceptor(graph.authenticationInterceptor())
             .build();
 
         server.start();
