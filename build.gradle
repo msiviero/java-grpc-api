@@ -12,7 +12,6 @@ repositories {
 dependencies {
     def grpcVersion = '1.30.0'
     def autoValueVersion = '1.7.3'
-    def requeryVersion = '1.6.1'
     def daggerVersion = '2.27'
     def floggerVersion = '0.5.1'
     def jwtVersion = '0.11.2'
@@ -26,15 +25,12 @@ dependencies {
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.google.flogger:flogger:$floggerVersion"
     implementation "com.google.flogger:flogger-system-backend:$floggerVersion"
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation 'mysql:mysql-connector-java:8.0.20'
-
-    implementation "io.requery:requery:$requeryVersion"
-
+    implementation 'org.springframework:spring-jdbc:5.2.7.RELEASE'
     implementation 'com.zaxxer:HikariCP:3.4.5'
-
     implementation "io.jsonwebtoken:jjwt-jackson:$jwtVersion"
-
     implementation "org.slf4j:slf4j-simple:1.7.30"
 
 
@@ -45,7 +41,6 @@ dependencies {
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
-    annotationProcessor "io.requery:requery-processor:$requeryVersion"
 
     runtime "io.jsonwebtoken:jjwt-impl:$jwtVersion"
     runtime "io.jsonwebtoken:jjwt-jackson:$jwtVersion"

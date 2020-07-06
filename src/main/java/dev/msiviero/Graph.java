@@ -4,12 +4,14 @@ import dagger.Component;
 import dev.msiviero.api.SecurityApi;
 import dev.msiviero.api.UserApi;
 import dev.msiviero.interceptor.AuthenticationInterceptor;
+import dev.msiviero.module.JsonModule;
 import dev.msiviero.module.PersistenceModule;
 import javax.inject.Singleton;
 
 @Singleton
 @Component(modules = {
-    PersistenceModule.class
+    PersistenceModule.class,
+    JsonModule.class
 })
 public interface Graph {
 

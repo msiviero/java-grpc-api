@@ -1,15 +1,15 @@
 package dev.msiviero.api;
 
 import dev.msiviero.api.SecurityGrpc.SecurityImplBase;
-import dev.msiviero.service.AuthenticationResult;
-import dev.msiviero.service.SecurityService;
+import dev.msiviero.service.auth.AuthenticationResult;
+import dev.msiviero.service.auth.SecurityService;
 import io.grpc.Status;
 import io.grpc.Status.Code;
 import io.grpc.stub.StreamObserver;
 import javax.inject.Inject;
 
 public class SecurityApi extends SecurityImplBase {
-    
+
     private final SecurityService securityService;
 
     @Inject
