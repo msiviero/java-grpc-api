@@ -6,6 +6,7 @@ option java_multiple_files = true;
 
 message MyUserResponse {
   string username = 1;
+  string displayName = 2;
 }
 
 message MyUserRequest {

@@ -1,4 +1,4 @@
-package dev.msiviero.service;
+package dev.msiviero.service.auth;
 
 import com.google.auto.value.AutoValue;
 
