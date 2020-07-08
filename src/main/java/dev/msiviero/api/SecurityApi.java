@@ -7,7 +7,9 @@ import io.grpc.Status;
 import io.grpc.Status.Code;
 import io.grpc.stub.StreamObserver;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class SecurityApi extends SecurityImplBase {
 
     private final SecurityService securityService;

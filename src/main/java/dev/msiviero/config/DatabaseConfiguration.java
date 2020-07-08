@@ -2,6 +2,9 @@ package dev.msiviero.config;
 
 import javax.inject.Inject;
 
+/*
+ * This can be implemented in a more structured way, for example reading from environment or a file
+ */
 public class DatabaseConfiguration {
 
     @Inject

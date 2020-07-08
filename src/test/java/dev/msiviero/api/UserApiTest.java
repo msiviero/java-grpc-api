@@ -4,6 +4,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import dev.msiviero.interceptor.AuthenticationInterceptor;
 import dev.msiviero.service.auth.SecurityService;
+import dev.msiviero.service.gravatar.GravatarService;
 import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.inprocess.InProcessChannelBuilder;
@@ -27,6 +28,9 @@ public class UserApiTest {
     @Mock
     private SecurityService securityService;
 
+    @Mock
+    private GravatarService gravatarService;
+
     private ManagedChannel channel;
 
     @Before
@@ -36,7 +40,7 @@ public class UserApiTest {
         final Server inProcessServer = InProcessServerBuilder
             .forName(serverName)
             .directExecutor()
-            .addService(new UserApi())
+            .addService(new UserApi(gravatarService))
             .intercept(new AuthenticationInterceptor(securityService))
             .build()
             .start();
